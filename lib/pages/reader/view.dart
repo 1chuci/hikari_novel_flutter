@@ -250,6 +250,8 @@ class ReaderPage extends StatelessWidget {
           initialOffset: controller.getInitLocation(),
           padding: padding,
           style: textStyle,
+          paraSpacing: controller.readerSettingsState.value.readerParaSpacing,
+          paraIndent: controller.readerSettingsState.value.readerParaIndent,
           onScroll: (position, max) {
             if (max == 0 && position == 0) {
               //仅一页的情况下

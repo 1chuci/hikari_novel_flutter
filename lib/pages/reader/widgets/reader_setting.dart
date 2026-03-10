@@ -68,6 +68,32 @@ class ReaderSettingPage extends StatelessWidget {
             onChangeEnd: (value) => controller.changeLineSpacing(value),
           ),
         ),
+        Obx(
+          () => SliderTile(
+            title: "para_indent".tr,
+            leading: const Icon(Icons.format_indent_increase),
+            min: 0,
+            max: 10,
+            divisions: 10,
+            decimalPlaces: 0,
+            value: controller.readerSettingsState.value.readerParaIndent,
+            onChanged: (value) => controller.readerSettingsState.value = controller.readerSettingsState.value.copyWith(readerParaIndent: value.toInt()),
+            onChangeEnd: (value) => controller.changeReaderParaIndent(value.toInt()),
+          ),
+        ),
+        Obx(
+          () => SliderTile(
+            title: "para_spacing".tr,
+            leading: const Icon(Icons.expand),
+            min: 0,
+            max: 50,
+            divisions: 50,
+            decimalPlaces: 0,
+            value: controller.readerSettingsState.value.readerParaSpacing,
+            onChanged: (value) => controller.readerSettingsState.value = controller.readerSettingsState.value.copyWith(readerParaSpacing: value.toInt()),
+            onChangeEnd: (value) => controller.changeReaderParaSpacing(value.toInt()),
+          ),
+        ),
         Obx(() {
           final sub = switch (controller.readerSettingsState.value.direction) {
             ReaderDirection.leftToRight => "left_to_right".tr,

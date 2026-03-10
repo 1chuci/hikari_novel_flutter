@@ -12,9 +12,21 @@ class VerticalReadPage extends StatefulWidget {
   final int initialOffset;
   final EdgeInsets padding;
   final TextStyle style;
+  final int paraSpacing;
+  final int paraIndent;
   final Function(double position, double max) onScroll;
 
-  const VerticalReadPage(this.text, this.images, {required this.initialOffset, required this.padding, required this.style, required this.onScroll, super.key});
+  const VerticalReadPage(
+    this.text,
+    this.images, {
+    required this.initialOffset,
+    required this.padding,
+    required this.style,
+    required this.paraSpacing,
+    required this.paraIndent,
+    required this.onScroll,
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => VerticalReadPageState();
@@ -30,6 +42,8 @@ class VerticalReadPageState extends State<VerticalReadPage> {
   List<String> images = [];
   TextStyle textStyle = TextStyle();
   EdgeInsets padding = EdgeInsets.zero;
+  late int paraIndent;
+  late int paraSpacing;
 
   late String _lastLayoutSig;
 
@@ -48,6 +62,7 @@ class VerticalReadPageState extends State<VerticalReadPage> {
   }
 
   double get currentPositionPixels => controller.position.pixels;
+
   double get maxPositionPixels => controller.position.maxScrollExtent;
 
   void _initController() {
@@ -109,6 +124,8 @@ class VerticalReadPageState extends State<VerticalReadPage> {
     textStyle = widget.style;
     images = List<String>.from(widget.images); //转换为纯净的List<String>
     padding = widget.padding;
+    paraIndent = widget.paraIndent;
+    paraSpacing = widget.paraSpacing;
     if (text.isEmpty && images.isEmpty) {
       setState(() {});
       return;
@@ -158,8 +175,23 @@ class VerticalReadPageState extends State<VerticalReadPage> {
     );
   }
 
-  Widget _buildText(String text) {
-    return RepaintBoundary(child: Text(text, style: textStyle));
+  Widget _buildText(String content) {
+    return RepaintBoundary(
+      child: Padding(
+        padding: EdgeInsets.only(bottom: paraSpacing.toDouble()),
+        child: RichText(
+          text: TextSpan(
+            style: textStyle,
+            children: [
+              WidgetSpan(
+                child: SizedBox(width: textStyle.fontSize! * paraIndent), //按汉字宽度缩进
+              ),
+              TextSpan(text: content),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildImage(String url, int index) {
@@ -187,8 +219,8 @@ class VerticalReadPageState extends State<VerticalReadPage> {
 
     _items = [];
 
-    for (var p in paragraphs) {
-      _items.add(ReaderItem.text(p + "\n")); //FIXME 去掉<+ "\n">
+    for (var para in paragraphs) {
+      _items.add(ReaderItem.text(para.trimLeft()));
     }
 
     for (int i = 0; i < widget.images.length; i++) {
@@ -213,6 +245,8 @@ class VerticalReadPageState extends State<VerticalReadPage> {
       p.right,
       p.top,
       p.bottom,
+      widget.paraIndent,
+      widget.paraSpacing,
     ].join("|");
   }
 }

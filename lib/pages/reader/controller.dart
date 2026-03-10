@@ -115,8 +115,8 @@ class ReaderController extends GetxController {
     //延迟更新阅读记录
     //debounce / ever / interval 只能在 Controller 生命周期里创建一次
     //TODO 还需要优化
-    debounce(currentLocation, (_) => setReadHistory(), time: const Duration(milliseconds: 100));
-    debounce(currentIndex, (_) => setReadHistory(), time: const Duration(milliseconds: 100));
+    debounce(currentLocation, (_) => setReadHistory(), time: const Duration(milliseconds: 150));
+    debounce(currentIndex, (_) => setReadHistory(), time: const Duration(milliseconds: 150));
   }
 
   @override
@@ -415,6 +415,16 @@ class ReaderController extends GetxController {
     LocalStorageService.instance.setReaderNightBgImage(path);
   }
 
+  void changeReaderParaIndent(int value) {
+    readerSettingsState.value = readerSettingsState.value.copyWith(readerParaIndent: value);
+    LocalStorageService.instance.setReaderParaIndent(value);
+  }
+
+  void changeReaderParaSpacing(int value) {
+    readerSettingsState.value = readerSettingsState.value.copyWith(readerParaSpacing: value);
+    LocalStorageService.instance.setReaderParaSpacing(value);
+  }
+
   void getTextColor() {
     if (Get.context!.isDarkMode) {
       currentTextColor.value = LocalStorageService.instance.getReaderNightTextColor();
@@ -604,6 +614,8 @@ class ReaderSettingsState {
   final Color? readerNightTextColor;
   final Color? readerDayBgColor;
   final Color? readerNightBgColor;
+  final int readerParaIndent;
+  final int readerParaSpacing;
 
   ReaderSettingsState({
     required this.direction,
@@ -630,6 +642,8 @@ class ReaderSettingsState {
     required this.readerNightTextColor,
     required this.readerDayBgColor,
     required this.readerNightBgColor,
+    required this.readerParaIndent,
+    required this.readerParaSpacing
   });
 
   ReaderSettingsState copyWith({
@@ -657,6 +671,8 @@ class ReaderSettingsState {
     Color? readerNightTextColor,
     Color? readerDayBgColor,
     Color? readerNightBgColor,
+    int? readerParaIndent,
+    int? readerParaSpacing
   }) => ReaderSettingsState(
     direction: direction ?? this.direction,
     pageTurningAnimation: pageTurningAnimation ?? this.pageTurningAnimation,
@@ -682,6 +698,8 @@ class ReaderSettingsState {
     readerNightTextColor: readerNightTextColor ?? this.readerNightTextColor,
     readerDayBgColor: readerDayBgColor ?? this.readerDayBgColor,
     readerNightBgColor: readerNightBgColor ?? this.readerNightBgColor,
+    readerParaIndent: readerParaIndent ?? this.readerParaIndent,
+    readerParaSpacing: readerParaSpacing ?? this.readerParaSpacing
   );
 
   ReaderSettingsState.init()
@@ -708,5 +726,7 @@ class ReaderSettingsState {
       readerDayTextColor = LocalStorageService.instance.getReaderDayTextColor(),
       readerNightTextColor = LocalStorageService.instance.getReaderNightTextColor(),
       readerDayBgColor = LocalStorageService.instance.getReaderDayBgColor(),
-      readerNightBgColor = LocalStorageService.instance.getReaderNightBgColor();
+      readerNightBgColor = LocalStorageService.instance.getReaderNightBgColor(),
+      readerParaIndent = LocalStorageService.instance.getReaderParaIndent(),
+      readerParaSpacing = LocalStorageService.instance.getReaderParaSpacing();
 }

@@ -290,6 +290,8 @@ class AppTranslations extends Translations {
       "free_copy": "自由复制",
       "cloudflare_403_exception_tip": "你的IP已被Cloudflare拒绝访问，请使用其他IP进行访问",
       "open_source_license": "开源许可",
+      "para_indent": "首行缩进",
+      "para_spacing": "段距",
     },
 
     "zh_TW": {
@@ -579,6 +581,8 @@ class AppTranslations extends Translations {
       "free_copy": "自由複製",
       "cloudflare_403_exception_tip": "你的IP已被Cloudflare拒絕訪問，請使用其他IP進行訪問",
       "open_source_license": "開源許可",
+      "para_indent": "首行縮進",
+      "para_spacing": "段距",
     }
   };
 }
